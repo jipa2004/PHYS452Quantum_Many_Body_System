@@ -60,10 +60,16 @@ st.markdown("""
   p, li, span, label, div { color: #1a1a2e !important; }
 
   /* Inputs, selects, sliders */
-  [data-baseweb="input"] input,
-  [data-baseweb="select"] div,
-  [data-baseweb="slider"] { color: #1a1a2e !important; }
+    [data-baseweb="input"] input,
+    [data-baseweb="select"] div {
+    color: #1a1a2e !important;
+    background-color: #eef0f8 !important;
+    }
 
+    [data-baseweb="input"] {
+    background-color: #eef0f8 !important;
+    border-radius: 6px !important;
+    }
   /* Metric widgets */
   [data-testid="metric-container"] * { color: #1a1a2e !important; }
 
