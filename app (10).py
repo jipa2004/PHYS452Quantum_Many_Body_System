@@ -15,69 +15,114 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # ─────────────────────────────────────────────────────────────────
+# Force matplotlib into a light style regardless of OS theme
+# ─────────────────────────────────────────────────────────────────
+plt.rcParams.update({
+    "figure.facecolor":  "#ffffff",
+    "axes.facecolor":    "#ffffff",
+    "axes.edgecolor":    "#cccccc",
+    "axes.labelcolor":   "#1a1a2e",
+    "xtick.color":       "#1a1a2e",
+    "ytick.color":       "#1a1a2e",
+    "text.color":        "#1a1a2e",
+    "legend.facecolor":  "#ffffff",
+    "legend.edgecolor":  "#cccccc",
+    "legend.labelcolor": "#1a1a2e",
+    "grid.color":        "#dddddd",
+    "lines.color":       "#1a1a2e",
+    "patch.edgecolor":   "#cccccc",
+})
+
+# ─────────────────────────────────────────────────────────────────
 # Page config & global style
 # ─────────────────────────────────────────────────────────────────
 st.set_page_config(page_title="P452 Project 2", layout="wide", page_icon="⚛️")
 
 st.markdown("""
 <style>
-  /* Force readable text everywhere */
+  /* ── Lock the entire app to a white/light theme ── */
+  html, body, [data-testid="stAppViewContainer"],
+  [data-testid="stApp"], [data-testid="block-container"],
+  .main, .block-container {
+    background-color: #f7f8fc !important;
+    color: #1a1a2e !important;
+  }
+
+  /* Sidebar (if any) */
+  [data-testid="stSidebar"] { background-color: #eef0f8 !important; }
+
+  /* All text nodes */
+  *, *::before, *::after { color: #1a1a2e !important; }
+
+  /* Override Streamlit's own dark-mode overrides */
   .stMarkdown, .stMarkdown p, .stMarkdown li,
-  .stAlert p, .stInfo p, .element-container p { color: #1a1a2e !important; }
+  .stMarkdown h1, .stMarkdown h2, .stMarkdown h3,
+  p, li, span, label, div { color: #1a1a2e !important; }
+
+  /* Inputs, selects, sliders */
+  [data-baseweb="input"] input,
+  [data-baseweb="select"] div,
+  [data-baseweb="slider"] { color: #1a1a2e !important; }
+
+  /* Metric widgets */
+  [data-testid="metric-container"] * { color: #1a1a2e !important; }
+
+  /* Tab strip */
+  .stTabs [data-baseweb="tab-list"] { background: #eef0f8 !important; }
+  .stTabs [data-baseweb="tab"] {
+    font-size: 1rem; font-weight: 500;
+    color: #1a1a2e !important;
+    background: transparent !important;
+  }
+  .stTabs [aria-selected="true"] {
+    background: #ffffff !important;
+    border-bottom: 3px solid #4a6cf7 !important;
+  }
+
+  /* Buttons */
+  .stButton button {
+    background-color: #4a6cf7 !important;
+    color: #ffffff !important;
+    border: none; border-radius: 6px;
+  }
+  .stButton button:hover { background-color: #3a5ce7 !important; }
 
   .block-container { padding-top: 1.2rem; }
 
   .main-title {
     font-size: 2rem; font-weight: 700;
-    color: #1a1a2e; margin-bottom: 0.2rem;
+    color: #1a1a2e !important; margin-bottom: 0.2rem;
   }
   .section-hdr {
     font-size: 1.25rem; font-weight: 600;
-    color: #1a1a2e; border-bottom: 2px solid #4a6cf7;
+    color: #1a1a2e !important; border-bottom: 2px solid #4a6cf7;
     padding-bottom: 4px; margin: 0.8rem 0 0.5rem;
   }
   .info-box {
-    background: #eef2ff;
+    background: #dde6ff !important;
     border-left: 4px solid #4a6cf7;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
+    padding: 0.75rem 1rem; border-radius: 6px;
     margin: 0.4rem 0 0.8rem;
-    color: #1a1a2e !important;
-    font-size: 0.92rem;
-    line-height: 1.55;
+    color: #1a1a2e !important; font-size: 0.92rem; line-height: 1.55;
   }
   .warn-box {
-    background: #fff8e1;
-    border-left: 4px solid #f59e0b;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    margin: 0.4rem 0 0.8rem;
-    color: #1a1a2e !important;
-    font-size: 0.92rem;
+    background: #fff3cd !important;
+    border-left: 4px solid #e6a817;
+    padding: 0.75rem 1rem; border-radius: 6px;
+    margin: 0.4rem 0 0.8rem; color: #1a1a2e !important; font-size: 0.92rem;
   }
   .ok-box {
-    background: #ecfdf5;
+    background: #d4f5e9 !important;
     border-left: 4px solid #10b981;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    margin: 0.4rem 0;
-    color: #1a1a2e !important;
-    font-size: 0.92rem;
+    padding: 0.75rem 1rem; border-radius: 6px;
+    margin: 0.4rem 0; color: #1a1a2e !important; font-size: 0.92rem;
   }
   .err-box {
-    background: #fef2f2;
+    background: #ffe0e0 !important;
     border-left: 4px solid #ef4444;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    margin: 0.4rem 0;
-    color: #1a1a2e !important;
-    font-size: 0.92rem;
+    padding: 0.75rem 1rem; border-radius: 6px;
+    margin: 0.4rem 0; color: #1a1a2e !important; font-size: 0.92rem;
   }
-  /* Metric label/value always dark */
-  [data-testid="metric-container"] label,
-  [data-testid="metric-container"] div { color: #1a1a2e !important; }
-  /* Tab text */
-  .stTabs [data-baseweb="tab"] { font-size: 1rem; font-weight: 500; color: #1a1a2e; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -228,16 +273,15 @@ with tab1:
         # ── Panel A: dimer ────────────────────────────────────────
         ax = axes1[0]
         ax.set_facecolor("white")
-        ax.plot(H_arr/J_11, E_uu/J_11,   color="#c0392b", lw=2,   label=r"$|\!\uparrow\uparrow\rangle$")
-        ax.plot(H_arr/J_11, E_dd/J_11,   color="#2980b9", lw=2,   label=r"$|\!\downarrow\downarrow\rangle$")
+        ax.plot(H_arr/J_11, E_uu/J_11,   color="#c0392b", lw=2,   label="|uu>")
+        ax.plot(H_arr/J_11, E_dd/J_11,   color="#2980b9", lw=2,   label="|dd>")
         ax.plot(H_arr/J_11, E_trip/J_11, color="#27ae60", lw=2, ls="--", label=r"Triplet $|T_0\rangle$")
         ax.plot(H_arr/J_11, E_sing/J_11, color="#e67e22", lw=2.5, label=r"Singlet $|S\rangle$")
         ax.axvline(Hc/J_11, color="#555555", ls=":", lw=1.5,
                    label=rf"$H_c/J = {Hc/J_11:.1f}$")
-        ax.set_xlabel(r"$H/J$", fontsize=12, color="#1a1a2e")
+        ax.set_xlabel(r"$H/J$", fontsize=12)
         ax.set_ylabel(r"$E/J$", fontsize=12, color="#1a1a2e")
-        ax.set_title("2-site Dimer – Eigenvalues vs $H$", fontsize=13, color="#1a1a2e")
-        ax.tick_params(colors="#1a1a2e")
+        ax.set_title("2-site Dimer – Eigenvalues vs $H$", fontsize=13)
         for spine in ax.spines.values():
             spine.set_edgecolor("#cccccc")
         ax.legend(fontsize=9, facecolor="white", edgecolor="#cccccc",
@@ -251,17 +295,16 @@ with tab1:
         blues  = ["#2980b9", "#3498db", "#74b9ff"]
         for i in range(3):
             ax2.plot(H_arr/J_11, E_p12[i]/J_11,  color=reds[i],  lw=2,
-                     label=rf"$S^z=+\tfrac12$, #{i+1}")
+                     label=f"Sz=+1/2  #{i+1}")
             ax2.plot(H_arr/J_11, E_m12[i]/J_11,  color=blues[i], lw=2, ls="--",
-                     label=rf"$S^z=-\tfrac12$, #{i+1}")
+                     label=f"Sz=-1/2  #{i+1}")
         ax2.plot(H_arr/J_11, E_uuu/J_11, color="#2d3436", lw=2, ls="-.",
-                 label=r"$|\!\uparrow\uparrow\uparrow\rangle$")
+                 label="|uuu>")
         ax2.plot(H_arr/J_11, E_ddd/J_11, color="#6c5ce7", lw=2, ls=":",
-                 label=r"$|\!\downarrow\downarrow\downarrow\rangle$")
-        ax2.set_xlabel(r"$H/J$", fontsize=12, color="#1a1a2e")
+                 label="|ddd>")
+        ax2.set_xlabel(r"$H/J$", fontsize=12)
         ax2.set_ylabel(r"$E/J$", fontsize=12, color="#1a1a2e")
-        ax2.set_title("3-site Triangle – Eigenvalues vs $H$", fontsize=13, color="#1a1a2e")
-        ax2.tick_params(colors="#1a1a2e")
+        ax2.set_title("3-site Triangle – Eigenvalues vs $H$", fontsize=13)
         for spine in ax2.spines.values():
             spine.set_edgecolor("#cccccc")
         ax2.legend(fontsize=7.5, ncol=2, facecolor="white",
@@ -395,7 +438,6 @@ with tab2:
             ax.set_ylabel(r"$E\,/\,(J \cdot N)$", fontsize=11, color="#1a1a2e")
             ax.set_title(f"{L_sel}×{L_sel}  Sz=0 Energy Levels", fontsize=12,
                          color="#1a1a2e")
-            ax.tick_params(colors="#1a1a2e")
             for sp in ax.spines.values(): sp.set_edgecolor("#cccccc")
             ax.legend(fontsize=8, facecolor="white", edgecolor="#cccccc",
                       labelcolor="#1a1a2e")
@@ -405,11 +447,10 @@ with tab2:
             ax2p = axes2[1]
             ax2p.set_facecolor("white")
             ax2p.plot(H_arr_12 / J_12, gs_E_arr, color="#c0392b", lw=2.5)
-            ax2p.set_xlabel(r"$H/J$", fontsize=11, color="#1a1a2e")
+            ax2p.set_xlabel(r"$H/J$", fontsize=11)
             ax2p.set_ylabel(r"$E_0\,/\,(J \cdot N)$", fontsize=11, color="#1a1a2e")
             ax2p.set_title(f"{L_sel}×{L_sel}  Ground State Energy vs $H$",
-                           fontsize=12, color="#1a1a2e")
-            ax2p.tick_params(colors="#1a1a2e")
+                           fontsize=12)
             for sp in ax2p.spines.values(): sp.set_edgecolor("#cccccc")
             ax2p.grid(alpha=0.3, color="#aaaaaa")
 
@@ -420,12 +461,11 @@ with tab2:
                       label=r"$\langle M_z \rangle$")
             ax3p.axhline( 0.5, color="#555555", ls="--", lw=1.2, label="Saturation ±½")
             ax3p.axhline(-0.5, color="#555555", ls="--", lw=1.2)
-            ax3p.set_xlabel(r"$H/J$", fontsize=11, color="#1a1a2e")
+            ax3p.set_xlabel(r"$H/J$", fontsize=11)
             ax3p.set_ylabel(r"$\langle M_z \rangle = \langle S^z_{tot}\rangle / N$",
                             fontsize=11, color="#1a1a2e")
             ax3p.set_title(f"{L_sel}×{L_sel}  Magnetisation Staircase",
-                           fontsize=12, color="#1a1a2e")
-            ax3p.tick_params(colors="#1a1a2e")
+                           fontsize=12)
             for sp in ax3p.spines.values(): sp.set_edgecolor("#cccccc")
             ax3p.legend(fontsize=9, facecolor="white", edgecolor="#cccccc",
                         labelcolor="#1a1a2e")
@@ -641,10 +681,9 @@ energies in units of ℏω<sub>B</sub>.
             ax1.plot(r, nF_ni,  color="#2980b9", lw=1.5, ls="--", alpha=0.55,
                      label=r"$n_F$ (non-inter.)")
             ax1.set_xlim(0, x_max)
-            ax1.set_xlabel(r"$r\,/\,a_{ho}$", fontsize=11, color="#1a1a2e")
+            ax1.set_xlabel(r"$r\,/\,a_{ho}$", fontsize=11)
             ax1.set_ylabel(r"$n(r)$ [arb. units]", fontsize=11, color="#1a1a2e")
-            ax1.set_title("Density Profiles", fontsize=12, color="#1a1a2e")
-            ax1.tick_params(colors="#1a1a2e")
+            ax1.set_title("Density Profiles", fontsize=12)
             for sp in ax1.spines.values(): sp.set_edgecolor("#cccccc")
             ax1.legend(fontsize=9, facecolor="white", edgecolor="#cccccc",
                        labelcolor="#1a1a2e")
@@ -664,9 +703,8 @@ energies in units of ℏω<sub>B</sub>.
                          fontsize=9, color="#1a1a2e")
             ax2.set_ylabel(r"Thomas-Fermi radius $[a_{ho}]$", fontsize=10,
                            color="#1a1a2e")
-            ax2.set_title("Cloud Sizes", fontsize=12, color="#1a1a2e")
-            ax2.tick_params(colors="#1a1a2e", axis="y")
-            ax2.tick_params(axis="x", labelsize=9, labelcolor="#1a1a2e")
+            ax2.set_title("Cloud Sizes", fontsize=12)
+            ax2.tick_params(axis="x", labelsize=9)
             for sp in ax2.spines.values(): sp.set_edgecolor("#cccccc")
             ax2.grid(axis="y", alpha=0.3, color="#aaaaaa")
 
@@ -682,9 +720,8 @@ energies in units of ℏω<sub>B</sub>.
                          f"{val:.1f}", ha="center", va="bottom",
                          fontsize=9, color="#1a1a2e")
             ax3.set_ylabel(r"$n(r=0)$ [arb. units]", fontsize=10, color="#1a1a2e")
-            ax3.set_title("Central Density", fontsize=12, color="#1a1a2e")
-            ax3.tick_params(colors="#1a1a2e", axis="y")
-            ax3.tick_params(axis="x", labelsize=9, labelcolor="#1a1a2e")
+            ax3.set_title("Central Density", fontsize=12)
+            ax3.tick_params(axis="x", labelsize=9)
             for sp in ax3.spines.values(): sp.set_edgecolor("#cccccc")
             ax3.grid(axis="y", alpha=0.3, color="#aaaaaa")
 
