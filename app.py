@@ -598,7 +598,10 @@ energies in units of ℏω<sub>B</sub>.
             r     = np.linspace(0.0, R_max, Nr)
 
             def norm3d(n, r_arr):
-                return np.trapz(n * 4 * np.pi * r_arr**2, r_arr)
+                integrand = n * 4 * np.pi * r_arr**2
+                # np.trapz was removed in NumPy 2.0; use np.trapezoid with fallback
+                trapz_fn = getattr(np, 'trapezoid', None) or getattr(np, 'trapz', None)
+                return trapz_fn(integrand, r_arr)
 
             def nF_from_muF(muF, r_arr, nB_arr):
                 VF  = 0.5 * mass_ratio * omF**2 * r_arr**2
